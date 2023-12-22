@@ -21,7 +21,7 @@ class UITextViewTests: XCTestCase {
         let tv = UITextView(frame: .zero)
         var values = [String?]()
 
-        tv.valuePublisher
+        tv.textPublisher
           .sink(receiveValue: { values.append($0) })
           .store(in: &subscriptions)
 
