@@ -6,12 +6,11 @@
 //  Copyright © 2021 Shai Mishali. All rights reserved.
 //
 
-import XCTest
 import Combine
 @testable import CombineCocoa
+import XCTest
 
 class UIScrollViewTests: XCTestCase {
-
     var subscriptions = Set<AnyCancellable>()
 
     override func tearDown() {
@@ -81,14 +80,14 @@ class UIScrollViewTests: XCTestCase {
         var resultTargetContentOffset: UnsafeMutablePointer<CGPoint>? = nil
 
         scrollView.willEndDraggingPublisher
-            .sink(receiveValue: { (velocity, targetContentOffset) in
+            .sink(receiveValue: { velocity, targetContentOffset in
                 resultVelocity = velocity
                 resultTargetContentOffset = targetContentOffset
             })
             .store(in: &subscriptions)
 
         let givenVelocity: CGPoint = .init(x: 42, y: 42)
-        let givenTargetContentOffset: UnsafeMutablePointer<CGPoint> = UnsafeMutablePointer<CGPoint> .allocate(capacity: 1)
+        let givenTargetContentOffset = UnsafeMutablePointer<CGPoint>.allocate(capacity: 1)
 
         defer { givenTargetContentOffset.deallocate() }
 
@@ -144,7 +143,7 @@ class UIScrollViewTests: XCTestCase {
 
     func test_didEndScrollingAnimation() {
         let scrollView = UIScrollView()
-        
+
         var didEndScrollingAnimation = false
 
         scrollView.didEndScrollingAnimationPublisher
@@ -165,7 +164,7 @@ class UIScrollViewTests: XCTestCase {
             .sink(receiveValue: { resultView = $0 })
             .store(in: &subscriptions)
 
-        let givenView: UIView = UIView()
+        let givenView = UIView()
 
         scrollView.delegate!.scrollViewWillBeginZooming?(scrollView, with: givenView)
 
@@ -179,13 +178,13 @@ class UIScrollViewTests: XCTestCase {
         var resultScale: CGFloat? = nil
 
         scrollView.didEndZooming
-            .sink(receiveValue: { (view, scale) in
+            .sink(receiveValue: { view, scale in
                 resultView = view
                 resultScale = scale
             })
             .store(in: &subscriptions)
 
-        let givenView: UIView = UIView()
+        let givenView = UIView()
         let givenScale: CGFloat = .zero
 
         scrollView.delegate!.scrollViewDidEndZooming!(scrollView, with: givenView, atScale: givenScale)

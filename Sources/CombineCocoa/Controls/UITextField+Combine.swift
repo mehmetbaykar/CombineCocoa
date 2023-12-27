@@ -7,46 +7,46 @@
 //
 
 #if canImport(UIKit) && !(os(iOS) && (arch(i386) || arch(arm)))
-import Combine
-import UIKit
+    import Combine
+    import UIKit
 
-@available(iOS 13.0, *)
-public extension UITextField {
-    /// A publisher emitting any text changes to a this text field.
-    var textPublisher: AnyPublisher<String?, Never> {
-        Publishers.ControlProperty(control: self, events: .defaultValueEvents, keyPath: \.text)
-                  .eraseToAnyPublisher()
-    }
-
-    /// A publisher emitting any attributed text changes to this text field.
-    var attributedTextPublisher: AnyPublisher<NSAttributedString?, Never> {
-        Publishers.ControlProperty(control: self, events: .defaultValueEvents, keyPath: \.attributedText)
-                  .eraseToAnyPublisher()
-    }
-
-    /// A publisher that emits whenever the user taps the return button and ends the editing on the text field.
-    var returnPublisher: AnyPublisher<Void, Never> {
-        controlEventPublisher(for: .editingDidEndOnExit)
-    }
-
-    /// A publisher that emits whenever the user taps the text fields and begin the editing.
-    var didBeginEditingPublisher: AnyPublisher<Void, Never> {
-        controlEventPublisher(for: .editingDidBegin)
-    }
-
-    /// A publisher emitting on end the editing.
-    var didEndEditingPublisher: AnyPublisher<Void, Never> {
-        controlEventPublisher(for: .editingDidEnd)
-    }
-
-    /// A publisher emits on first responder changes
-    var isFirstResponderPublisher: AnyPublisher<Bool, Never> {
-      Just<Void>(())
-        .merge(with: didBeginEditingPublisher, didEndEditingPublisher)
-        .map { [weak self] in
-          self?.isFirstResponder ?? false
+    @available(iOS 13.0, *)
+    public extension UITextField {
+        /// A publisher emitting any text changes to a this text field.
+        var textPublisher: AnyPublisher<String?, Never> {
+            Publishers.ControlProperty(control: self, events: .defaultValueEvents, keyPath: \.text)
+                .eraseToAnyPublisher()
         }
-        .eraseToAnyPublisher()
+
+        /// A publisher emitting any attributed text changes to this text field.
+        var attributedTextPublisher: AnyPublisher<NSAttributedString?, Never> {
+            Publishers.ControlProperty(control: self, events: .defaultValueEvents, keyPath: \.attributedText)
+                .eraseToAnyPublisher()
+        }
+
+        /// A publisher that emits whenever the user taps the return button and ends the editing on the text field.
+        var returnPublisher: AnyPublisher<Void, Never> {
+            controlEventPublisher(for: .editingDidEndOnExit)
+        }
+
+        /// A publisher that emits whenever the user taps the text fields and begin the editing.
+        var didBeginEditingPublisher: AnyPublisher<Void, Never> {
+            controlEventPublisher(for: .editingDidBegin)
+        }
+
+        /// A publisher emitting on end the editing.
+        var didEndEditingPublisher: AnyPublisher<Void, Never> {
+            controlEventPublisher(for: .editingDidEnd)
+        }
+
+        /// A publisher emits on first responder changes
+        var isFirstResponderPublisher: AnyPublisher<Bool, Never> {
+            Just<Void>(())
+                .merge(with: didBeginEditingPublisher, didEndEditingPublisher)
+                .map { [weak self] in
+                    self?.isFirstResponder ?? false
+                }
+                .eraseToAnyPublisher()
+        }
     }
-}
 #endif

@@ -6,9 +6,9 @@
 //  Copyright © 2021 Shai Mishali. All rights reserved.
 //
 
-import XCTest
 import Combine
 @testable import CombineCocoa
+import XCTest
 
 class UITabBarTests: XCTestCase {
     var subscriptions = Set<AnyCancellable>()
@@ -35,6 +35,4 @@ class UITabBarTests: XCTestCase {
 
         XCTAssertEqual(resultTabBarItem, givenTabBarItem)
     }
-
-
 }

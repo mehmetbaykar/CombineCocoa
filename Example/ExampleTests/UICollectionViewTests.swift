@@ -6,9 +6,9 @@
 //  Copyright © 2020 Combine Community. All rights reserved.
 //
 
-import XCTest
 import Combine
 @testable import CombineCocoa
+import XCTest
 
 class UICollectionViewTests: XCTestCase {
     var subscriptions = Set<AnyCancellable>()
@@ -88,7 +88,7 @@ class UICollectionViewTests: XCTestCase {
         XCTAssertEqual(resultIndexPath, givenIndexPath)
         XCTAssertEqual(resultCollectioViewCell, givenCollectionViewCell)
     }
-    
+
     func test_didSelectItemAt_for_multiple_subscribers() {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 

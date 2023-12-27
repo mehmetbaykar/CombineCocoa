@@ -1,14 +1,14 @@
 //
-//  ViewController.swift
+//  ControlsViewController.swift
 //  Example
 //
 //  Created by Shai Mishali on 03/08/2019.
 //  Copyright © 2019 Shai Mishali. All rights reserved.
 //
 
-import UIKit
 import Combine
 import CombineCocoa
+import UIKit
 
 class ControlsViewController: UIViewController {
     @IBOutlet private var segmented: UISegmentedControl!
@@ -22,23 +22,23 @@ class ControlsViewController: UIViewController {
     @IBOutlet private var tabBar: UITabBar!
 
     private var subscriptions = Set<AnyCancellable>()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // Set up some gesture recognizers
         let leftSwipe = UISwipeGestureRecognizer()
         leftSwipe.direction = .left
         view.addGestureRecognizer(leftSwipe)
-        
+
         let longPress = UILongPressGestureRecognizer()
         longPress.minimumPressDuration = 2
         view.addGestureRecognizer(longPress)
-        
+
         let doubleTap = UITapGestureRecognizer()
         doubleTap.numberOfTapsRequired = 2
         view.addGestureRecognizer(doubleTap)
-        
+
         // Each merge can go up to 8 elements, so we have to chain a few of them ;-)
         Just("Debug Output:")
             .merge(with: segmented.selectedSegmentIndexPublisher.map { "Segmented at index \($0)" },
@@ -51,11 +51,11 @@ class ControlsViewController: UIViewController {
             .merge(with: leftSwipe.swipePublisher.map { "Swiped Left with Gesture \($0.memoryAddress)" },
                    longPress.longPressPublisher.map { "Long Pressed with Gesture \($0.memoryAddress)" },
                    doubleTap.tapPublisher.map { "Double-tapped view with two fingers with Gesture \($0.memoryAddress)" },
-                   tabBar.didSelectPublisher.map { "tabBar selected title is \($0.title ?? "") and badge is \($0.badgeValue ?? "")"},
+                   tabBar.didSelectPublisher.map { "tabBar selected title is \($0.title ?? "") and badge is \($0.badgeValue ?? "")" },
                    console.reachedBottomPublisher().map { _ in "Reached the bottom of the UITextView" })
             .scan("") { $0 + "\n" + $1 }
-            .handleEvents(receiveOutput: { [console] text in
-                guard let console = console else { return }
+            .handleEvents(receiveOutput: { [console] _ in
+                guard let console else { return }
                 console.scrollRangeToVisible(console.selectedRange)
             })
             .assign(to: \.text, on: console)

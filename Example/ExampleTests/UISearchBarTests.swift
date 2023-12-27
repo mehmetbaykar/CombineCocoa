@@ -6,9 +6,9 @@
 //  Copyright © 2020 Combine Community. All rights reserved.
 //
 
-import XCTest
 import Combine
 @testable import CombineCocoa
+import XCTest
 
 class UISearchBarTests: XCTestCase {
     var subscription: AnyCancellable!
