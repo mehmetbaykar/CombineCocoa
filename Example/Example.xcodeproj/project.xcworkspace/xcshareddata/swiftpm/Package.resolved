@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "combinecocoa",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mehmetbaykar/CombineCocoa",
+      "state" : {
+        "branch" : "development",
+        "revision" : "a615fd5895cc8dcb47f6a18a2ef017f031db808b"
+      }
+    }
+  ],
+  "version" : 2
+}

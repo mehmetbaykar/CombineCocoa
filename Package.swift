@@ -10,6 +10,6 @@ let package = Package(
     dependencies: [],
     targets: [
         .target(name: "CombineCocoa", dependencies: ["Runtime"]),
-        .target(name: "Runtime", dependencies: [])
+        .target(name: "Runtime", dependencies: []),
     ]
 )

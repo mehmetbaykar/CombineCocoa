@@ -6,17 +6,17 @@
 //  Copyright © 2020 Combine Community. All rights reserved.
 //
 
-import XCTest
 import Combine
 @testable import CombineCocoa
+import XCTest
 
 class UITableViewTests: XCTestCase {
     var subscriptions = Set<AnyCancellable>()
-    
+
     override func tearDown() {
         subscriptions = .init()
     }
-    
+
     func test_didSelectRowAt() {
         let tableView = UITableView()
 
@@ -103,7 +103,7 @@ class UITableViewTests: XCTestCase {
 
         XCTAssertEqual(resultIndexPath, givenIndexPath)
     }
-    
+
     func test_didSelectRowAt_for_multiple_subscribers() {
         let tableView = UITableView()
 

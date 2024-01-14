@@ -6,69 +6,72 @@
 //  Copyright © 2020 Combine Community. All rights reserved.
 //
 
-#if !(os(iOS) && (arch(i386) || arch(arm)))
-import Combine
-import Foundation
-import UIKit.UIControl
+#if canImport(UIKit) && !(os(iOS) && (arch(i386) || arch(arm)))
+    import Combine
+    import Foundation
+    import UIKit.UIControl
 
-// MARK: - Publisher
-@available(iOS 13.0, *)
-public extension Combine.Publishers {
-    /// A Control Event is a publisher that emits whenever the provided
-    /// Control Events fire.
-    struct ControlEvent<Control: UIControl>: Publisher {
-        public typealias Output = Void
-        public typealias Failure = Never
+    // MARK: - Publisher
 
-        private let control: Control
-        private let controlEvents: Control.Event
+    @available(iOS 13.0, *)
+    public extension Combine.Publishers {
+        /// A Control Event is a publisher that emits whenever the provided
+        /// Control Events fire.
+        struct ControlEvent<Control: UIControl>: Publisher {
+            public typealias Output = Void
+            public typealias Failure = Never
 
-        /// Initialize a publisher that emits a Void
-        /// whenever any of the provided Control Events trigger.
-        ///
-        /// - parameter control: UI Control.
-        /// - parameter events: Control Events.
-        public init(control: Control,
-                    events: Control.Event) {
-            self.control = control
-            self.controlEvents = events
-        }
+            private let control: Control
+            private let controlEvents: Control.Event
 
-        public func receive<S: Subscriber>(subscriber: S) where S.Failure == Failure, S.Input == Output {
-            let subscription = Subscription(subscriber: subscriber,
-                                            control: control,
-                                            event: controlEvents)
+            /// Initialize a publisher that emits a Void
+            /// whenever any of the provided Control Events trigger.
+            ///
+            /// - parameter control: UI Control.
+            /// - parameter events: Control Events.
+            public init(control: Control,
+                        events: Control.Event)
+            {
+                self.control = control
+                controlEvents = events
+            }
 
-            subscriber.receive(subscription: subscription)
-        }
-    }
-}
+            public func receive<S: Subscriber>(subscriber: S) where S.Failure == Failure, S.Input == Output {
+                let subscription = Subscription(subscriber: subscriber,
+                                                control: control,
+                                                event: controlEvents)
 
-// MARK: - Subscription
-@available(iOS 13.0, *)
-extension Combine.Publishers.ControlEvent {
-    private final class Subscription<S: Subscriber, Control: UIControl>: Combine.Subscription where S.Input == Void {
-        private var subscriber: S?
-        weak private var control: Control?
-
-        init(subscriber: S, control: Control, event: Control.Event) {
-            self.subscriber = subscriber
-            self.control = control
-            control.addTarget(self, action: #selector(processControlEvent), for: event)
-        }
-
-        func request(_ demand: Subscribers.Demand) {
-            // We don't care about the demand at this point.
-            // As far as we're concerned - UIControl events are endless until the control is deallocated.
-        }
-
-        func cancel() {
-            subscriber = nil
-        }
-
-        @objc private func processControlEvent() {
-            _ = subscriber?.receive()
+                subscriber.receive(subscription: subscription)
+            }
         }
     }
-}
+
+    // MARK: - Subscription
+
+    @available(iOS 13.0, *)
+    extension Combine.Publishers.ControlEvent {
+        private final class Subscription<S: Subscriber, Control: UIControl>: Combine.Subscription where S.Input == Void {
+            private var subscriber: S?
+            private weak var control: Control?
+
+            init(subscriber: S, control: Control, event: Control.Event) {
+                self.subscriber = subscriber
+                self.control = control
+                control.addTarget(self, action: #selector(processControlEvent), for: event)
+            }
+
+            func request(_: Subscribers.Demand) {
+                // We don't care about the demand at this point.
+                // As far as we're concerned - UIControl events are endless until the control is deallocated.
+            }
+
+            func cancel() {
+                subscriber = nil
+            }
+
+            @objc private func processControlEvent() {
+                _ = subscriber?.receive()
+            }
+        }
+    }
 #endif

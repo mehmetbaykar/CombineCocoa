@@ -6,14 +6,12 @@
 //  Copyright © 2021 Shai Mishali. All rights reserved.
 //
 
-import XCTest
 import Combine
 @testable import CombineCocoa
+import XCTest
 
 class UIPageControlTests: XCTestCase {
-
     func test_pageControl() {
-
         let maxPageCount = 10
 
         let pc = UIPageControl()
@@ -23,11 +21,11 @@ class UIPageControlTests: XCTestCase {
 
         let sub = pc.currentPagePublisher.sink { values.append($0) }
 
-        for page in 1..<maxPageCount {
+        for page in 1 ..< maxPageCount {
             pc.currentPage = page
         }
 
-        XCTAssertEqual(values, Array(0..<maxPageCount))
+        XCTAssertEqual(values, Array(0 ..< maxPageCount))
 
         sub.cancel()
     }

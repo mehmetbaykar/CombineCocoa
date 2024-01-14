@@ -6,9 +6,9 @@
 //  Copyright © 2020 Shai Mishali. All rights reserved.
 //
 
-import XCTest
 import Combine
 @testable import CombineCocoa
+import XCTest
 
 class UITextViewTests: XCTestCase {
     var subscriptions = Set<AnyCancellable>()
@@ -21,9 +21,9 @@ class UITextViewTests: XCTestCase {
         let tv = UITextView(frame: .zero)
         var values = [String?]()
 
-        tv.valuePublisher
-          .sink(receiveValue: { values.append($0) })
-          .store(in: &subscriptions)
+        tv.textPublisher
+            .sink(receiveValue: { values.append($0) })
+            .store(in: &subscriptions)
 
         tv.text = "hey"
         tv.text = "hey ho"
